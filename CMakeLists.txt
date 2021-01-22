@@ -6,6 +6,10 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 MESSAGE(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
+set(WINDOWS_EXPORT_ALL_SYMBOLS True)
+
+find_package(Boost)
+include_directories(${Boost_INCLUDE_DIRS})
 
 # Check C++11 support
 set(CMAKE_CXX_STANDARD 11)
@@ -30,12 +34,13 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
   # use the static CRT if other libraries are compiled with /MT
   # (CMake sets /MD by default, but for example Pangolin uses /MT by default)
-  #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
   #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 endif()
 
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 find_package(OpenCV 3 QUIET)
 if(NOT OpenCV_FOUND)
@@ -75,12 +80,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 set(ORB_SLAM3_LIB_TYPE SHARED)
 IF(WIN32)
+  add_definitions(/bigobj)
   # uncomment only one of the lines below:
   # because there is no DLL API in the code,
   # we either have to build STATIC libraries, 
-  set(ORB_SLAM3_LIB_TYPE STATIC)
+  # set(ORB_SLAM3_LIB_TYPE STATIC)
   # or we have to export all symbols from all SHARED libraries
-  #set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
   # Note that the ideal solution would be to add an export API to the relevant classes.
 ENDIF(WIN32)
 
@@ -157,6 +163,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
+
 # Build examples
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/RGB-D)
@@ -221,4 +228,56 @@ add_executable(stereo_inertial_tum_vi
 Examples/Stereo-Inertial/stereo_inertial_tum_vi.cc)
 target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 
+# -----------------------------------------------------------------------------------------------------------------
+# PYTHON STUFF
+# -----------------------------------------------------------------------------------------------------------------
+find_package(pybind11)
 
+pybind11_add_module(ORBSLAM3
+src/python_bindings/bindings_System.cpp
+)
+
+target_link_libraries(ORBSLAM3
+${PROJECT_NAME}
+${OpenCV_LIBS}
+${EIGEN3_LIBS}
+${Pangolin_LIBRARIES}
+DBoW2
+g2o
+${Boost_LIBRARIES}
+${OPENSSL_CRYPTO_LIBRARY}
+)
+
+find_package(Python)
+
+add_custom_command(TARGET ORBSLAM3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy
+        "$<TARGET_FILE:g2o>"
+        "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:g2o>"
+        COMMENT "Copying to output directory")
+add_custom_command(TARGET ORBSLAM3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy
+        "$<TARGET_FILE:DBoW2>"
+        "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:DBoW2>"
+        COMMENT "Copying to output directory")
+add_custom_command(TARGET ORBSLAM3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy
+        "$<TARGET_FILE:ORB_SLAM3>"
+        "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORB_SLAM3>"
+        COMMENT "Copying to output directory")
+add_custom_command(TARGET ORBSLAM3 POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy
+        "$<TARGET_FILE:ORBSLAM3>"
+        "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORBSLAM3>"
+        COMMENT "Copying to output directory")
+add_custom_command(TARGET ORBSLAM3
+        POST_BUILD
+        COMMAND ${PYTHON} -m pip install .. --upgrade)
+
+# SUPER LAZY WAY TO INSTALL THE PACKAGE FOR PYTHON
+#install(TARGETS ORBSLAM3 DESTINATION ${Python_SITEARCH})
+#add_custom_command(
+#        TARGET ORBSLAM3
+#        POST_BUILD
+#        COMMAND ${CMAKE_COMMAND} --install ${CMAKE_BINARY_DIR}  --config Release
+#)

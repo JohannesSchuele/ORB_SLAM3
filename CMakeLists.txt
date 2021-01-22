@@ -256,7 +256,7 @@ ${Boost_LIBRARIES}
 ${OPENSSL_CRYPTO_LIBRARY}
 )
 
-find_package(Python)
+find_package(Python REQUIRED)
 
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
@@ -280,7 +280,7 @@ add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMENT "Copying to output directory")
 add_custom_command(TARGET ORBSLAM3
         POST_BUILD
-        COMMAND ${PYTHON} -m pip install .. --upgrade)
+        COMMAND ${PYTHON_EXECUTABLE} -m pip install .. --upgrade)
 
 # SUPER LAZY WAY TO INSTALL THE PACKAGE FOR PYTHON
 #install(TARGETS ORBSLAM3 DESTINATION ${Python_SITEARCH})

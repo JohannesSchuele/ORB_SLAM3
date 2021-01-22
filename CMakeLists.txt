@@ -8,8 +8,16 @@ ENDIF()
 MESSAGE(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
 set(WINDOWS_EXPORT_ALL_SYMBOLS True)
 
+
 find_package(Boost)
+# boost include directories need to be added and the libraries to be linked to be added. I find it easiest to just manually
+# do it. SO THESE VALUES NEED TO MATCH YOUR BOOST INSTALLATION.
 include_directories(${Boost_INCLUDE_DIRS})
+include_directories("${Boost_INCLUDE_DIRS}/boost_1_72_0")
+link_directories("C:/sofa_libs/boost_1_72_0/lib")
+# *******************************************************************************************************************
+
+
 
 # Check C++11 support
 set(CMAKE_CXX_STANDARD 11)

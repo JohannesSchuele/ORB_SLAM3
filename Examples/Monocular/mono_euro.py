@@ -2,14 +2,13 @@ from ORBSLAM3 import System, eSensor, VectorPoint
 import cv2
 import os
 import time
-import numpy as np
 
 # example files used for this script:
 # http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/machine_hall/MH_05_difficult/MH_05_difficult.zip
 
 video_image_dir = 'mav0/cam0/data'  # data downloaded from above link and extracted to this folder
 camera_settings_file = 'EuRoC.yaml'
-vocabulary_file = '../../Vocabulary/ORBvoc.txt'
+vocabulary_file = '../../Vocabulary/ORBvoc.txt'  # Don't forget to unzip the vocabulary
 show_gui = True
 
 file_names = os.listdir(video_image_dir)
@@ -21,7 +20,7 @@ images = [(os.path.join(video_image_dir, file), float(file[:-4])/1e9) for file i
 slam = System(vocabulary_file, camera_settings_file, eSensor.MONOCULAR, True)
 
 for i in range(len(images) - 1):
-    img = np.asarray(cv2.imread(images[i][0], 0))  # load image as grayscale
+    img = cv2.imread(images[i][0], 0)  # load image as grayscale
     start = time.time()
 
     slam.TrackMonocular(img, images[i][1], VectorPoint(), "")

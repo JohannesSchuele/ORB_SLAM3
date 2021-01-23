@@ -20,7 +20,7 @@ link_directories("C:/sofa_libs/boost_1_72_0/lib")
 
 
 # Check C++11 support
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 cmake_policy(SET CMP0057 NEW) # enable IN_LIST operator
@@ -240,9 +240,14 @@ target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 # PYTHON STUFF
 # -----------------------------------------------------------------------------------------------------------------
 find_package(pybind11)
+find_package (Python COMPONENTS Interpreter NumPy)
 
 pybind11_add_module(ORBSLAM3
+src/python_bindings/bindings.cpp
+src/python_bindings/ndarray_converter.cpp
+src/python_bindings/ndarray_converter.h
 src/python_bindings/bindings_System.cpp
+src/python_bindings/bindings_ImuTypes.cpp
 )
 
 target_link_libraries(ORBSLAM3
@@ -254,6 +259,7 @@ DBoW2
 g2o
 ${Boost_LIBRARIES}
 ${OPENSSL_CRYPTO_LIBRARY}
+Python::NumPy
 )
 
 find_package(Python REQUIRED)

@@ -240,7 +240,7 @@ target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 # PYTHON STUFF
 # -----------------------------------------------------------------------------------------------------------------
 find_package(pybind11)
-find_package (Python COMPONENTS Interpreter NumPy)
+find_package (Python 3 COMPONENTS Interpreter NumPy)
 
 pybind11_add_module(ORBSLAM3
 src/python_bindings/bindings.cpp
@@ -250,7 +250,7 @@ src/python_bindings/bindings_System.cpp
 src/python_bindings/bindings_ImuTypes.cpp
 )
 
-target_link_libraries(ORBSLAM3
+target_link_libraries(ORBSLAM3 PRIVATE
 ${PROJECT_NAME}
 ${OpenCV_LIBS}
 ${EIGEN3_LIBS}
@@ -261,8 +261,6 @@ ${Boost_LIBRARIES}
 ${OPENSSL_CRYPTO_LIBRARY}
 Python::NumPy
 )
-
-find_package(Python REQUIRED)
 
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy

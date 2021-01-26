@@ -241,6 +241,7 @@ target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 # -----------------------------------------------------------------------------------------------------------------
 find_package(pybind11)
 find_package (Python 3 COMPONENTS Interpreter NumPy)
+find_package(NumPy)
 
 pybind11_add_module(ORBSLAM3
 src/python_bindings/bindings.cpp
@@ -249,7 +250,10 @@ src/python_bindings/ndarray_converter.h
 src/python_bindings/bindings_System.cpp
 src/python_bindings/bindings_ImuTypes.cpp
 )
-include_directories(${Python3_NumPy_INCLUDE_DIRS})  # this requires cmake >= 3.14
+
+include_directories(${Python3_NumPy_INCLUDE_DIRS})  # this requires cmake >= 3.14. Empty otherwise
+include_directories(${NUMPY_INCLUDE_DIRS})
+
 target_link_libraries(ORBSLAM3 PUBLIC
 ${PROJECT_NAME}
 Python::NumPy

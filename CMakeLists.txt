@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.14)
 project(ORB_SLAM3)
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -249,7 +249,7 @@ src/python_bindings/ndarray_converter.h
 src/python_bindings/bindings_System.cpp
 src/python_bindings/bindings_ImuTypes.cpp
 )
-
+include_directories(${Python3_NumPy_INCLUDE_DIRS})  # this requires cmake >= 3.14
 target_link_libraries(ORBSLAM3 PUBLIC
 ${PROJECT_NAME}
 Python::NumPy

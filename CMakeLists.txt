@@ -20,7 +20,7 @@ link_directories("C:/sofa_libs/boost_1_72_0/lib")
 
 
 # Check C++11 support
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS OFF)
 cmake_policy(SET CMP0057 NEW) # enable IN_LIST operator
@@ -250,15 +250,8 @@ src/python_bindings/bindings_System.cpp
 src/python_bindings/bindings_ImuTypes.cpp
 )
 
-target_link_libraries(ORBSLAM3 PRIVATE
+target_link_libraries(ORBSLAM3 PUBLIC
 ${PROJECT_NAME}
-${OpenCV_LIBS}
-${EIGEN3_LIBS}
-${Pangolin_LIBRARIES}
-DBoW2
-g2o
-${Boost_LIBRARIES}
-${OPENSSL_CRYPTO_LIBRARY}
 Python::NumPy
 )
 
@@ -266,22 +259,22 @@ add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:g2o>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:g2o>"
-        COMMENT "Copying to output directory")
+        COMMENT "Copying $<TARGET_FILE_NAME:g2o> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:DBoW2>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:DBoW2>"
-        COMMENT "Copying to output directory")
+        COMMENT "Copying $<TARGET_FILE_NAME:DBoW2> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:ORB_SLAM3>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORB_SLAM3>"
-        COMMENT "Copying to output directory")
+        COMMENT "Copying $<TARGET_FILE_NAME:ORB_SLAM3> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:ORBSLAM3>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORBSLAM3>"
-        COMMENT "Copying to output directory")
+        COMMENT "Copying $<TARGET_FILE_NAME:ORBSLAM3> to output directory\n")
 add_custom_command(TARGET ORBSLAM3
         POST_BUILD
         COMMAND ${PYTHON_EXECUTABLE} -m pip install .. --upgrade)

@@ -240,8 +240,11 @@ target_link_libraries(stereo_inertial_tum_vi ${PROJECT_NAME})
 # PYTHON STUFF
 # -----------------------------------------------------------------------------------------------------------------
 find_package(pybind11)
-find_package (Python 3 COMPONENTS Interpreter NumPy)
-find_package(NumPy)
+if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
+  find_package(Python 3 COMPONENTS Interpreter NumPy)
+else()
+  find_package(NumPy)
+endif()
 
 pybind11_add_module(ORBSLAM3
 src/python_bindings/bindings.cpp
@@ -256,7 +259,7 @@ include_directories(${NUMPY_INCLUDE_DIRS})
 
 target_link_libraries(ORBSLAM3 PUBLIC
 ${PROJECT_NAME}
-Python::NumPy
+NumPy
 )
 
 add_custom_command(TARGET ORBSLAM3 POST_BUILD

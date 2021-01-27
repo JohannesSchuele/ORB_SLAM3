@@ -258,9 +258,7 @@ include_directories(${Python3_NumPy_INCLUDE_DIRS})  # this requires cmake >= 3.1
 include_directories(${NUMPY_INCLUDE_DIRS})
 
 target_link_libraries(ORBSLAM3 PUBLIC
-${PROJECT_NAME}
-NumPy
-)
+${PROJECT_NAME})
 
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
@@ -280,7 +278,7 @@ add_custom_command(TARGET ORBSLAM3 POST_BUILD
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORBSLAM3>")
 add_custom_command(TARGET ORBSLAM3
         POST_BUILD
-        COMMAND ${PYTHON_EXECUTABLE} -m pip install .. --upgrade)
+        COMMAND ${PYTHON_EXECUTABLE} -m pip install .. -V --upgrade)
 
 # SUPER LAZY WAY TO INSTALL THE PACKAGE FOR PYTHON
 #install(TARGETS ORBSLAM3 DESTINATION ${Python_SITEARCH})

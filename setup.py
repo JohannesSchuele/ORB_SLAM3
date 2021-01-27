@@ -4,11 +4,10 @@ import shutil
 
 libraries = []
 files = os.listdir('ORBSLAM3')
-[print(file) for file in files]
 for file in files:
-    if file[-3:] in ['pyd', 'dll', 'lib']:
+    if os.path.splitext(file)[1] in ['pyd', 'dll', 'lib', 'so']:
         if file.find('ORBSLAM') >= 0:
-            renamed_file = 'ORBSLAM3.' + file[-3:]
+            renamed_file = 'ORBSLAM3.' + os.path.splitext(file)[1]
             try:
                 shutil.copyfile(os.path.join('ORBSLAM3', file), os.path.join('ORBSLAM3', renamed_file))
             except shutil.SameFileError as e:

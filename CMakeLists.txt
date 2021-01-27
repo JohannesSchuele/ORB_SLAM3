@@ -263,22 +263,18 @@ add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:g2o>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:g2o>"
-        COMMENT "Copying $<TARGET_FILE_NAME:g2o> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:DBoW2>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:DBoW2>"
-        COMMENT "Copying $<TARGET_FILE_NAME:DBoW2> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:ORB_SLAM3>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORB_SLAM3>"
-        COMMENT "Copying $<TARGET_FILE_NAME:ORB_SLAM3> to output directory\n")
 add_custom_command(TARGET ORBSLAM3 POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy
         "$<TARGET_FILE:ORBSLAM3>"
         "${PROJECT_SOURCE_DIR}/ORBSLAM3/$<TARGET_FILE_NAME:ORBSLAM3>"
-        COMMENT "Copying $<TARGET_FILE_NAME:ORBSLAM3> to output directory\n")
 add_custom_command(TARGET ORBSLAM3
         POST_BUILD
         COMMAND ${PYTHON_EXECUTABLE} -m pip install .. --upgrade)

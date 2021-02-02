@@ -54,8 +54,6 @@ while True:
         start = time.time()
         slam.TrackMonocular(img, time.time(), imu_data, "")
         imu_data.clear()
-        while time.time() - start < 1/20:
-            time.sleep(0.001)
 
     except KeyboardInterrupt as e:
         break

@@ -35,7 +35,7 @@ void init_System(py::module &m){
                         This stops local mapping thread (map building) and performs only camera tracking.
                          )mydelimiter")
             .def("TrackMonocular", &ORB_SLAM3::System::TrackMonocular,
-                 py::arg("im"), py::arg("timestamp"), py::arg("vImuMeas")=std::vector<ORB_SLAM3::IMU::Point>(), py::arg("filename")="",
+                 py::arg("im"), py::arg("timestamp"), py::arg("vImuMeas")=std::vector<ORB_SLAM3::IMU::Point>(), py::arg("filename")="", py::call_guard<py::gil_scoped_release>(),
                  R"mydelimiter(
                  Proccess the given monocular frame and optionally imu data.\n
                  Input images: RGB (CV_8UC3) or grayscale (CV_8U). RGB is converted to grayscale.\n

@@ -252,6 +252,13 @@ src/python_bindings/ndarray_converter.cpp
 src/python_bindings/ndarray_converter.h
 src/python_bindings/bindings_System.cpp
 src/python_bindings/bindings_ImuTypes.cpp
+src/python_bindings/bindings_Atlas.cpp
+src/python_bindings/bindings_Converter.cpp
+src/python_bindings/bindings_Frame.cpp
+src/python_bindings/bindings_FrameDrawer.cpp
+src/python_bindings/bindings_Pinhole.cpp
+src/python_bindings/bindings_G2oTypes.cpp
+src/python_bindings/bindings_Initializer.cpp
 )
 
 include_directories(${Python3_NumPy_INCLUDE_DIRS})  # this requires cmake >= 3.14. Empty otherwise
